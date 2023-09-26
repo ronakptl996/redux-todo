@@ -1,8 +1,17 @@
 import React, { useState, useEffect } from "react";
 import InputComponent from "./InputComponent";
 import { useDispatch, useSelector } from "react-redux";
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
+import {
+  Button,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Form,
+} from "reactstrap";
 import { setModal, updatePostDetails } from "../features/posts/postsSlice";
+import { useFormik } from "formik";
+import { modalValidationSchema } from "../Schemas";
 
 const ModalComponent = () => {
   const [title, setTitle] = useState("");
@@ -14,8 +23,21 @@ const ModalComponent = () => {
     dispatch(setModal({ isOpen: !modal.isOpen, value: {}, modalType: "" }));
   };
 
+  const { values, errors, touched, handleBlur, handleChange, handleSubmit } =
+    useFormik({
+      initialValues: { title, body },
+      validationSchema: modalValidationSchema,
+      onSubmit: (values, action) => {},
+      enableReinitialize: true,
+    });
+
   const submitBtn = (id) => {
-    dispatch(updatePostDetails({ id, data: { title, body } }));
+    dispatch(
+      updatePostDetails({
+        id,
+        data: { title: values.title, body: values.body },
+      })
+    );
     toggle();
   };
 
@@ -25,7 +47,7 @@ const ModalComponent = () => {
   }, [modal]);
 
   return (
-    <div>
+    <Form>
       <Modal isOpen={modal.isOpen} toggle={toggle}>
         <ModalHeader toggle={toggle}>
           {modal.modalType === "viewDetails" ? (
@@ -38,24 +60,37 @@ const ModalComponent = () => {
           <InputComponent
             label="Title"
             placeholder="Enter your Title"
-            value={title}
             type="text"
             readOnly={modal.modalType === "viewDetails" && true}
-            onChange={(e) => setTitle(e.target.value)}
+            name="title"
+            value={values.title}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            error={errors.title}
+            touched={touched.title}
           />
 
           <InputComponent
             label="Content"
             placeholder="Enter description for title"
-            value={body}
             type="textarea"
             readOnly={modal.modalType === "viewDetails" && true}
-            onChange={(e) => setBody(e.target.value)}
+            name="body"
+            value={values.body}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            error={errors.body}
+            touched={touched.body}
           />
         </ModalBody>
         <ModalFooter>
           {modal.modalType === "editDetails" && (
-            <Button color="primary" onClick={() => submitBtn(modal.value.id)}>
+            <Button
+              type="submit"
+              color="primary"
+              disabled={Object.keys(errors).length > 0}
+              onClick={() => submitBtn(modal.value.id)}
+            >
               Submit
             </Button>
           )}
@@ -64,7 +99,7 @@ const ModalComponent = () => {
           </Button>
         </ModalFooter>
       </Modal>
-    </div>
+    </Form>
   );
 };
 

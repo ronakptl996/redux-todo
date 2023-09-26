@@ -1,55 +1,70 @@
-import React, { useState } from "react";
+import React from "react";
 import InputComponent from "./InputComponent";
 import { Button, Form } from "reactstrap";
 import { useDispatch } from "react-redux";
 import { submitPost } from "../features/posts/postsSlice";
+import { useFormik } from "formik";
+import { validationSchema } from "../Schemas";
 
 const Home = () => {
-  const [userId, setUserId] = useState("");
-  const [title, setTitle] = useState("");
-  const [body, setBody] = useState("");
-
   const dispatch = useDispatch();
 
-  const submitBtn = () => {
-    let id = Date.now();
-    dispatch(submitPost({ id, userId, title, body }));
-    setUserId("");
-    setBody("");
-    setTitle("");
+  const initialValues = {
+    userId: "",
+    title: "",
+    body: "",
   };
+
+  const { values, errors, touched, handleBlur, handleChange, handleSubmit } =
+    useFormik({
+      initialValues: initialValues,
+      validationSchema: validationSchema,
+      onSubmit: (values, action) => {
+        dispatch(submitPost({ id: Date.now(), ...values }));
+        action.resetForm();
+      },
+    });
 
   return (
     <div className="container">
-      <Form className="col-md-6 my-5 m-auto p-5 bg-light rounded-3 shadow-sm">
+      <Form
+        className="col-md-6 my-5 m-auto p-5 bg-light rounded-3 shadow-sm"
+        onSubmit={handleSubmit}
+      >
         <InputComponent
           label="User ID"
           placeholder="Enter your User ID"
-          value={userId}
           type="text"
-          onChange={(e) => {
-            setUserId(e.target.value);
-          }}
+          name="userId"
+          value={values.userId}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          error={errors.userId}
+          touched={touched.userId}
         />
         <InputComponent
           label="Title"
           placeholder="Enter your Title"
-          value={title}
           type="text"
-          onChange={(e) => {
-            setTitle(e.target.value);
-          }}
+          name="title"
+          value={values.title}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          error={errors.title}
+          touched={touched.title}
         />
         <InputComponent
           label="Content"
           placeholder="Enter description for title"
-          value={body}
           type="textarea"
-          onChange={(e) => {
-            setBody(e.target.value);
-          }}
+          name="body"
+          value={values.body}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          error={errors.body}
+          touched={touched.body}
         />
-        <Button color="primary" onClick={submitBtn}>
+        <Button color="primary" type="submit">
           Submit
         </Button>
       </Form>
