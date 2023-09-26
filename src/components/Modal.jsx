@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import SimpleReactValidator from "simple-react-validator";
 import InputComponent from "./InputComponent";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
@@ -9,14 +10,30 @@ const ModalComponent = () => {
   const [body, setBody] = useState("");
   const dispatch = useDispatch();
   const { modal } = useSelector((state) => state);
+  const [, forceUpdate] = useState();
+
+  const simpleValidator = useRef(
+    new SimpleReactValidator({
+      className: "text-danger",
+      messages: {
+        title: "title is red.",
+        description: "description needed",
+      },
+    })
+  );
 
   const toggle = () => {
     dispatch(setModal({ isOpen: !modal.isOpen, value: {}, modalType: "" }));
   };
 
   const submitBtn = (id) => {
-    dispatch(updatePostDetails({ id, data: { title, body } }));
-    toggle();
+    if (simpleValidator.current.allValid()) {
+      dispatch(updatePostDetails({ id, data: { title, body } }));
+      toggle();
+    } else {
+      simpleValidator.current.showMessages();
+      forceUpdate(1);
+    }
   };
 
   useEffect(() => {
@@ -36,21 +53,35 @@ const ModalComponent = () => {
         </ModalHeader>
         <ModalBody>
           <InputComponent
+            name="title"
             label="Title"
             placeholder="Enter your Title"
             value={title}
             type="text"
             readOnly={modal.modalType === "viewDetails" && true}
             onChange={(e) => setTitle(e.target.value)}
+            onBlur={() => simpleValidator.current.showMessageFor("title")}
+            errorMessage={simpleValidator.current.message(
+              "title",
+              title,
+              "required|min:25"
+            )}
           />
 
           <InputComponent
+            name="description"
             label="Content"
             placeholder="Enter description for title"
             value={body}
             type="textarea"
             readOnly={modal.modalType === "viewDetails" && true}
             onChange={(e) => setBody(e.target.value)}
+            onBlur={() => simpleValidator.current.showMessageFor("description")}
+            errorMessage={simpleValidator.current.message(
+              "description",
+              body,
+              "required|min:40"
+            )}
           />
         </ModalBody>
         <ModalFooter>
