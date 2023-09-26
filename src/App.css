@@ -14,3 +14,11 @@ a{
 .viewDetails:hover img{
     color: white;
 }
+
+.post-section > div:last-child{
+    display: contents;
+}
+
+.swal2-cancel{
+    margin-right: 10px;
+}
