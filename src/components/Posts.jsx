@@ -1,12 +1,8 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import DataTable from "react-data-table-component";
-import {
-  fetchPosts,
-  STATUSES,
-  setModal,
-  deletePost,
-} from "../features/posts/postsSlice";
+import { STATUSES, setModal, deletePost } from "../features/posts/postsSlice";
 import { Button } from "reactstrap";
 import { descriptionFormat, tittleFormat } from "../utils/helper";
 import Shimmer from "./Shimmer";
@@ -16,6 +12,7 @@ import deleteIcon from "../assets/delete.png";
 
 const Posts = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { posts, status } = useSelector((state) => state);
 
   const showModel = (modalType, post) => {
@@ -54,7 +51,7 @@ const Posts = () => {
           <Button
             size="sm"
             color=""
-            onClick={() => showModel("editDetails", row)}
+            onClick={() => navigate(`/edit/${row.id}`)}
           >
             <img src={editIcon} width={"18px"} alt="Edit Icon" />
           </Button>
@@ -65,10 +62,6 @@ const Posts = () => {
       ),
     },
   ];
-
-  useEffect(() => {
-    dispatch(fetchPosts());
-  }, []);
 
   return status === STATUSES.LOADING ? (
     <Shimmer />

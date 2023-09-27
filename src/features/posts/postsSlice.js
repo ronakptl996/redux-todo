@@ -10,6 +10,7 @@ export const STATUSES = Object.freeze({
 
 const initialState = {
   posts: [],
+  post: {},
   status: STATUSES.IDLE,
   modal: {
     isOpen: false,
@@ -49,6 +50,10 @@ export const postsSlice = createSlice({
     deleteStatePost: (state, action) => {
       state.posts = state.posts.filter((post) => post.id !== action.payload);
     },
+    getPostById: (state, action) => {
+      // console.log(typeof +action.payload);
+      state.post = state.posts.filter((post) => post.id === +action.payload);
+    },
   },
 });
 
@@ -59,6 +64,7 @@ export const {
   updatePost,
   deleteStatePost,
   addPost,
+  getPostById,
 } = postsSlice.actions;
 export default postsSlice.reducer;
 
