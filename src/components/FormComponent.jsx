@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect } from "react";
 import { useLocation, useParams, useNavigate } from "react-router-dom";
 import SimpleReactValidator from "simple-react-validator";
 import InputComponent from "./InputComponent";
-import { Button, Form } from "reactstrap";
+import { Button } from "reactstrap";
 import { useDispatch, useSelector } from "react-redux";
 import {
   submitPost,
@@ -11,6 +11,7 @@ import {
 } from "../features/posts/postsSlice";
 
 const FormComponent = () => {
+  const [validationErrors, setValidationErrors] = useState({});
   const [userId, setUserId] = useState(null);
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
@@ -21,9 +22,8 @@ const FormComponent = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const { post } = useSelector((state) => state);
+  const { post, modal } = useSelector((state) => state);
 
-  // const validator = new SimpleReactValidator();
   const simpleValidator = useRef(
     new SimpleReactValidator({
       className: "text-danger",
@@ -42,6 +42,8 @@ const FormComponent = () => {
         setUserId("");
         setBody("");
         setTitle("");
+
+        setValidationErrors({});
       } else {
         try {
           await dispatch(updatePostDetails({ id, data: { title, body } }));
@@ -51,6 +53,7 @@ const FormComponent = () => {
     } else {
       simpleValidator.current.showMessages();
       forceUpdate(1);
+      setValidationErrors(simpleValidator.current.getErrorMessages());
     }
   };
 
@@ -64,8 +67,11 @@ const FormComponent = () => {
     if (pathname.includes("/edit")) {
       setTitle(post[0]?.title);
       setBody(post[0]?.body);
+    } else if (pathname === "/posts") {
+      setTitle(modal.value.title);
+      setBody(modal.value.body);
     }
-  }, [post]);
+  }, [post, modal]);
 
   return (
     <>
@@ -85,15 +91,16 @@ const FormComponent = () => {
             userId,
             "required|min:0|numeric"
           )}
+          validationErrors={validationErrors && validationErrors.userId}
         />
       )}
-      {/* {simpleValidator.current.message("userId", userId, "required")} */}
       <InputComponent
         label="Title"
         name="title"
         placeholder="Enter your Title"
         value={title}
         type="text"
+        readOnly={modal.modalType === "viewDetails" && true}
         onChange={(e) => {
           setTitle(e.target.value);
         }}
@@ -103,6 +110,7 @@ const FormComponent = () => {
           title,
           "required|min:25"
         )}
+        validationErrors={validationErrors && validationErrors.title}
       />
       <InputComponent
         label="Description"
@@ -110,6 +118,7 @@ const FormComponent = () => {
         placeholder="Enter description for title"
         value={body}
         type="textarea"
+        readOnly={modal.modalType === "viewDetails" && true}
         onChange={(e) => {
           setBody(e.target.value);
         }}
@@ -119,12 +128,14 @@ const FormComponent = () => {
           body,
           "required|min:40"
         )}
+        validationErrors={validationErrors && validationErrors.description}
       />
-      {pathname === "/" ? (
+      {pathname === "/" && (
         <Button color="primary" onClick={submitBtn.bind(this)}>
           Submit
         </Button>
-      ) : (
+      )}{" "}
+      {pathname.includes("edit") && (
         <Button color="primary" onClick={submitBtn.bind(this, id)}>
           Update
         </Button>

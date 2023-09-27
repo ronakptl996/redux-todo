@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
-import FormComponent from "./FormComponent";
-import { fetchPosts } from "../features/posts/postsSlice";
 import { useDispatch } from "react-redux";
 import { Form } from "reactstrap";
+import FormComponent from "../components/FormComponent";
+import { fetchPosts } from "../features/posts/postsSlice";
 
 const Home = () => {
   const dispatch = useDispatch();

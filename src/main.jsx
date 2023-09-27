@@ -12,9 +12,9 @@ import {
   createRoutesFromElements,
 } from "react-router-dom";
 import Layout from "./Layout.jsx";
-import Home from "./components/Home.jsx";
-import Posts from "./components/Posts.jsx";
-import Edit from "./components/Edit";
+import Home from "./pages/Home";
+import Posts from "./pages/Posts";
+import Edit from "./pages/Edit";
 
 const route = createBrowserRouter(
   createRoutesFromElements(

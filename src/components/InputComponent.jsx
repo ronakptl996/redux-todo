@@ -1,6 +1,5 @@
-import React, { useRef } from "react";
+import React from "react";
 import { FormGroup, Input, Label } from "reactstrap";
-// import SimpleReactValidator from "simple-react-validator";
 
 const InputComponent = ({
   name,
@@ -12,16 +11,8 @@ const InputComponent = ({
   readOnly,
   onBlur,
   errorMessage,
+  validationErrors,
 }) => {
-  // const simpleValidator = useRef(
-  //   new SimpleReactValidator({
-  //     className: "text-danger",
-  //     messages: {
-  //       title: "That is not an title.",
-  //     },
-  //   })
-  // );
-
   return (
     <FormGroup>
       <Label for={label}>{label}</Label>
@@ -36,7 +27,7 @@ const InputComponent = ({
         readOnly={readOnly}
         onBlur={onBlur}
       />
-      {errorMessage}
+      {validationErrors && errorMessage}
     </FormGroup>
   );
 };
