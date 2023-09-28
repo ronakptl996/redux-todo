@@ -13,7 +13,7 @@ import deleteIcon from "../assets/delete.png";
 const Posts = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { posts, status } = useSelector((state) => state);
+  const { posts, status } = useSelector((state) => state.post);
 
   const showModel = (modalType, post) => {
     dispatch(setModal({ isOpen: true, post: post, modalType: modalType }));
@@ -63,7 +63,7 @@ const Posts = () => {
     },
   ];
 
-  return status === STATUSES.LOADING ? (
+  return status == STATUSES.LOADING ? (
     <Shimmer />
   ) : (
     <section className="container mt-5 d-flex flex-wrap justify-content-between post-section">

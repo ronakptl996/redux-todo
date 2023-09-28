@@ -6,7 +6,7 @@ import { setModal } from "../features/posts/postsSlice";
 
 const ModalComponent = () => {
   const dispatch = useDispatch();
-  const { modal } = useSelector((state) => state);
+  const { modal } = useSelector((state) => state.post);
 
   const toggle = () => {
     dispatch(

@@ -1,5 +1,5 @@
-import { createSlice } from "@reduxjs/toolkit";
 import Swal from "sweetalert2";
+import { createSlice } from "@reduxjs/toolkit";
 import { Toast } from "../../utils/helper";
 
 export const STATUSES = Object.freeze({
@@ -51,7 +51,6 @@ export const postsSlice = createSlice({
       state.posts = state.posts.filter((post) => post.id !== action.payload);
     },
     getPostById: (state, action) => {
-      // console.log(typeof +action.payload);
       state.post = state.posts.filter((post) => post.id === +action.payload);
     },
   },

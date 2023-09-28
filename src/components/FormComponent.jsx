@@ -22,7 +22,7 @@ const FormComponent = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const { post, modal } = useSelector((state) => state);
+  const { post, modal } = useSelector((state) => state.post);
 
   const simpleValidator = useRef(
     new SimpleReactValidator({

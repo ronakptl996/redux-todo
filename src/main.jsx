@@ -15,13 +15,30 @@ import Layout from "./Layout.jsx";
 import Home from "./pages/Home";
 import Posts from "./pages/Posts";
 import Edit from "./pages/Edit";
+import Login from "./pages/Login";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 const route = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<Layout />}>
       <Route path="" element={<Home />} />
-      <Route path="posts" element={<Posts />} />
-      <Route path="edit/:id" element={<Edit />} />
+      <Route
+        path="posts"
+        element={
+          <ProtectedRoute>
+            <Posts />
+          </ProtectedRoute>
+        }
+      />
+      <Route path="login" element={<Login />} />
+      <Route
+        path="edit/:id"
+        element={
+          <ProtectedRoute>
+            <Edit />
+          </ProtectedRoute>
+        }
+      />
     </Route>
   )
 );

@@ -22,3 +22,8 @@ export const Toast = Swal.mixin({
     toast.addEventListener("mouseleave", Swal.resumeTimer);
   },
 });
+
+export const loginBtn = () => {
+  console.log("clicked");
+  sessionStorage.setItem("isLoggedIn", true);
+};
