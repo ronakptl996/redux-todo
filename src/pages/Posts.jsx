@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import DataTable from "react-data-table-component";
-import { Button } from "reactstrap";
+import { InputGroup, Button, Input, Row, Col, FormGroup } from "reactstrap";
 import Shimmer from "../components/Shimmer";
 import { descriptionFormat, tittleFormat } from "../utils/helper";
 import { STATUSES, setModal, deletePost } from "../features/posts/postsSlice";
@@ -11,9 +11,20 @@ import editIcon from "../assets/edit.png";
 import deleteIcon from "../assets/delete.png";
 
 const Posts = () => {
+  const [filterText, setFilterText] = useState("");
+  const [filteredData, setFilteredData] = useState([]);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { posts, status } = useSelector((state) => state.post);
+
+  useEffect(() => {
+    const data = posts.filter(
+      (post) =>
+        post.title.includes(filterText) || post.body.includes(filterText)
+    );
+
+    setFilteredData(data);
+  }, [filterText]);
 
   const showModel = (modalType, post) => {
     dispatch(setModal({ isOpen: true, post: post, modalType: modalType }));
@@ -22,6 +33,33 @@ const Posts = () => {
   const deletePostItem = (id) => {
     dispatch(deletePost(id));
   };
+
+  const subHeaderComponentMemo = useMemo(() => {
+    const handleClear = () => {
+      if (filterText) {
+        setFilterText("");
+      }
+    };
+
+    return (
+      <>
+        <Row>
+          <Col md={12}>
+            <FormGroup>
+              <InputGroup>
+                <Input
+                  placeholder="Search..."
+                  onChange={(e) => setFilterText(e.target.value)}
+                  value={filterText}
+                />
+                <Button onClick={handleClear}>Clear</Button>
+              </InputGroup>
+            </FormGroup>
+          </Col>
+        </Row>
+      </>
+    );
+  }, [filterText]);
 
   const columns = [
     {
@@ -67,7 +105,13 @@ const Posts = () => {
     <Shimmer />
   ) : (
     <section className="container mt-5 d-flex flex-wrap justify-content-between post-section">
-      <DataTable pagination columns={columns} data={posts} />
+      <DataTable
+        pagination
+        columns={columns}
+        data={filteredData}
+        subHeader
+        subHeaderComponent={subHeaderComponentMemo}
+      />
     </section>
   );
 };
