@@ -2,16 +2,16 @@ import React from "react";
 import { FormGroup, Input, Label } from "reactstrap";
 
 const InputComponent = ({
+  name,
   label,
   onChange,
   placeholder,
   type,
   value,
   readOnly,
-  name,
   onBlur,
-  error,
-  touched,
+  errorMessage,
+  validationErrors,
 }) => {
   return (
     <FormGroup>
@@ -27,7 +27,7 @@ const InputComponent = ({
         readOnly={readOnly}
         onBlur={onBlur}
       />
-      {error && touched && <p>{error}</p>}
+      {validationErrors && errorMessage}
     </FormGroup>
   );
 };

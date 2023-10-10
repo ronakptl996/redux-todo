@@ -6,8 +6,8 @@ export const tittleFormat = (title) => {
 };
 
 export const descriptionFormat = (description) => {
-  return description.length > 180
-    ? description.slice(0, 180) + "..."
+  return description.length > 190
+    ? description.slice(0, 190) + "..."
     : description;
 };
 
@@ -22,3 +22,8 @@ export const Toast = Swal.mixin({
     toast.addEventListener("mouseleave", Swal.resumeTimer);
   },
 });
+
+export const loginBtn = () => {
+  console.log("clicked");
+  sessionStorage.setItem("isLoggedIn", true);
+};

@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
 import {
   Collapse,
   Navbar,
@@ -7,17 +7,24 @@ import {
   NavbarBrand,
   Nav,
   NavItem,
-  UncontrolledDropdown,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem,
-  NavbarText,
+  Button,
 } from "reactstrap";
+import { useSelector, useDispatch } from "react-redux";
+import { logoutBtn, setIsLoggedInState } from "../features/auth/authSlice";
 
 function NavbarComponent() {
   const [isOpen, setIsOpen] = useState(false);
 
+  const dispatch = useDispatch();
+  const { isLoggedIn } = useSelector((state) => state.auth);
+  const navigate = useNavigate();
+
   const toggle = () => setIsOpen(!isOpen);
+
+  useEffect(() => {
+    let isLoggedIn = JSON.parse(sessionStorage.getItem("isLoggedIn"));
+    dispatch(setIsLoggedInState(isLoggedIn));
+  }, []);
 
   return (
     <div>
@@ -31,16 +38,33 @@ function NavbarComponent() {
         <Collapse isOpen={isOpen} navbar>
           <Nav className="mr-auto" navbar>
             <NavItem>
-              <NavLink
-                className={({ isActive }) =>
-                  `fw-normal py-3 px-3 ${isActive ? "bg-primary-subtle" : ""}`
-                }
-                to="/posts"
-              >
-                Posts
-              </NavLink>
+              {isLoggedIn && (
+                <NavLink
+                  className={({ isActive }) =>
+                    `fw-normal py-3 px-3 ${isActive ? "bg-primary-subtle" : ""}`
+                  }
+                  to="/posts"
+                >
+                  Posts
+                </NavLink>
+              )}
             </NavItem>
           </Nav>
+          {isLoggedIn ? (
+            <Button
+              color="danger"
+              onClick={() => {
+                dispatch(logoutBtn());
+                navigate("/login");
+              }}
+            >
+              Logout
+            </Button>
+          ) : (
+            <Button color="primary" onClick={() => navigate("/login")}>
+              Login
+            </Button>
+          )}
         </Collapse>
       </Navbar>
     </div>
