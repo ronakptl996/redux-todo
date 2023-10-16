@@ -9,12 +9,14 @@ import { STATUSES, setModal, deletePost } from "../features/posts/postsSlice";
 import viewIcon from "../assets/view-details.png";
 import editIcon from "../assets/edit.png";
 import deleteIcon from "../assets/delete.png";
+import { useTranslation } from "react-i18next";
 
 const Posts = () => {
   const [filterText, setFilterText] = useState("");
   const [filteredData, setFilteredData] = useState([]);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { t } = useTranslation("translation");
   const { posts, status } = useSelector((state) => state.post);
 
   useEffect(() => {
@@ -24,7 +26,7 @@ const Posts = () => {
     );
 
     setFilteredData(data);
-  }, [filterText]);
+  }, [filterText, posts]);
 
   const showModel = (modalType, post) => {
     dispatch(setModal({ isOpen: true, post: post, modalType: modalType }));
@@ -48,18 +50,18 @@ const Posts = () => {
             <FormGroup>
               <InputGroup>
                 <Input
-                  placeholder="Search..."
+                  placeholder={t("PLSEARCH")}
                   onChange={(e) => setFilterText(e.target.value)}
                   value={filterText}
                 />
-                <Button onClick={handleClear}>Clear</Button>
+                <Button onClick={handleClear}>{t("CLEAR")}</Button>
               </InputGroup>
             </FormGroup>
           </Col>
         </Row>
       </>
     );
-  }, [filterText]);
+  }, [filterText, t]);
 
   const columns = [
     {

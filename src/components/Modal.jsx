@@ -10,10 +10,12 @@ import {
 } from "reactstrap";
 import FormComponent from "./FormComponent";
 import { setModal } from "../features/posts/postsSlice";
+import { useTranslation } from "react-i18next";
 
 const ModalComponent = () => {
   const dispatch = useDispatch();
   const { modal } = useSelector((state) => state.post);
+  const { t } = useTranslation("translation");
 
   const toggle = () => {
     dispatch(
@@ -29,14 +31,14 @@ const ModalComponent = () => {
     <Form>
       <Modal isOpen={modal.isOpen} toggle={toggle}>
         <ModalHeader toggle={toggle}>
-          <h4>View Details</h4>
+          <h4>{t("VIEWDETAILS")}</h4>
         </ModalHeader>
         <ModalBody>
           <FormComponent />
         </ModalBody>
         <ModalFooter>
           <Button color="secondary" onClick={toggle}>
-            Cancel
+            {t("CANCEL")}
           </Button>
         </ModalFooter>
       </Modal>

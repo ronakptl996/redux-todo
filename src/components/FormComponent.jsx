@@ -9,6 +9,7 @@ import {
   updatePostDetails,
   getPostById,
 } from "../features/posts/postsSlice";
+import { useTranslation } from "react-i18next";
 
 const FormComponent = () => {
   const [validationErrors, setValidationErrors] = useState({});
@@ -16,6 +17,7 @@ const FormComponent = () => {
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const [, forceUpdate] = useState();
+  const { t } = useTranslation("translation");
 
   const dispatch = useDispatch();
   const { pathname } = useLocation();
@@ -77,8 +79,8 @@ const FormComponent = () => {
     <>
       {pathname === "/" && (
         <InputComponent
-          label="User ID"
-          placeholder="Enter your User ID"
+          label={t("USERID")}
+          placeholder={t("PLUSERID")}
           value={userId}
           name="userId"
           type="number"
@@ -95,9 +97,9 @@ const FormComponent = () => {
         />
       )}
       <InputComponent
-        label="Title"
+        label={t("TITLE")}
         name="title"
-        placeholder="Enter your Title"
+        placeholder={t("PLTITLE")}
         value={title}
         type="text"
         readOnly={modal.modalType === "viewDetails" && true}
@@ -113,9 +115,9 @@ const FormComponent = () => {
         validationErrors={validationErrors && validationErrors.title}
       />
       <InputComponent
-        label="Description"
+        label={t("DESCRIPTION")}
         name="description"
-        placeholder="Enter description for title"
+        placeholder={t("PLDESC")}
         value={body}
         type="textarea"
         readOnly={modal.modalType === "viewDetails" && true}
@@ -132,12 +134,12 @@ const FormComponent = () => {
       />
       {pathname === "/" && (
         <Button color="primary" onClick={submitBtn.bind(this)}>
-          Submit
+          {t("SUBMIT")}
         </Button>
       )}{" "}
       {pathname.includes("edit") && (
         <Button color="primary" onClick={submitBtn.bind(this, id)}>
-          Update
+          {t("UPDATE")}
         </Button>
       )}
     </>

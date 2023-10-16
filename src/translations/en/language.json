@@ -1,0 +1,22 @@
+{
+    "POSTS": "Posts",
+    "LOGOUT": "Logout",
+    "SUBMIT": "Submit",
+    "LOGIN": "Login",
+    "UPDATE": "Update",
+    "USERNAME": "Username",
+    "PASSWORD": "Password",
+    "USERID": "UserID",
+    "TITLE": "Title",
+    "DESCRIPTION": "Description",
+    "EDITDETAILS": "Edit Details",
+    "VIEWDETAILS": "View Details",
+    "CANCEL": "Cancel",
+    "CLEAR": "Clear",
+    "PLUSERID": "Enter Your UserID",
+    "PLTITLE": "Enter Your Title",
+    "PLDESC": "Enter Description for title",
+    "PLUSERNAME": "Enter Your Username",
+    "PLUSERPASS": "Enter Your Password",
+    "PLSEARCH": "Search"
+}

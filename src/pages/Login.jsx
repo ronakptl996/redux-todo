@@ -5,12 +5,14 @@ import { Button, Form } from "reactstrap";
 import { useDispatch } from "react-redux";
 import { loginBtn } from "../features/auth/authSlice";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [validationErrors, setValidationErrors] = useState({});
   const [, forceUpdate] = useState();
+  const { t } = useTranslation("translation");
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -41,9 +43,9 @@ const Login = () => {
     <div className="container">
       <Form className="col-md-6 my-5 m-auto p-5 bg-light rounded-3 shadow">
         <InputComponent
-          label="Username"
+          label={t("USERNAME")}
           name="username"
-          placeholder="Enter your Username"
+          placeholder={t("PLUSERNAME")}
           value={username}
           type="text"
           onChange={(e) => {
@@ -58,9 +60,9 @@ const Login = () => {
           validationErrors={validationErrors && validationErrors.username}
         />
         <InputComponent
-          label="Password"
+          label={t("PASSWORD")}
           name="password"
-          placeholder="Enter your Password"
+          placeholder={t("PLUSERPASS")}
           value={password}
           type="text"
           onChange={(e) => {
@@ -76,7 +78,7 @@ const Login = () => {
         />
 
         <Button color="primary" onClick={submitBtn}>
-          Submit
+          {t("SUBMIT")}
         </Button>
       </Form>
     </div>

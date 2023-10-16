@@ -22,3 +22,11 @@ a{
 .swal2-cancel{
     margin-right: 10px;
 }
+
+select{
+    padding: 8px;
+    outline: none;
+    border: none;
+    border-radius: 5px;
+    margin-left: 10px;
+}

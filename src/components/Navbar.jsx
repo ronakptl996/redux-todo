@@ -11,9 +11,13 @@ import {
 } from "reactstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { logoutBtn, setIsLoggedInState } from "../features/auth/authSlice";
+import { useTranslation } from "react-i18next";
+import { fetchPosts } from "../features/posts/postsSlice";
 
 function NavbarComponent() {
   const [isOpen, setIsOpen] = useState(false);
+  const [language, setLanguage] = useState("en");
+  const { t, i18n } = useTranslation("translation");
 
   const dispatch = useDispatch();
   const { isLoggedIn } = useSelector((state) => state.auth);
@@ -21,10 +25,24 @@ function NavbarComponent() {
 
   const toggle = () => setIsOpen(!isOpen);
 
+  const changeLanguage = (e) => {
+    setLanguage(e.target.value);
+    i18n.changeLanguage(e.target.value);
+    localStorage.setItem("language", JSON.stringify(e.target.value));
+  };
+
   useEffect(() => {
+    let language = JSON.parse(localStorage.getItem("language")) || "";
     let isLoggedIn = JSON.parse(sessionStorage.getItem("isLoggedIn"));
+
+    setLanguage(language);
+    i18n.changeLanguage(language);
     dispatch(setIsLoggedInState(isLoggedIn));
   }, []);
+
+  useEffect(() => {
+    dispatch(fetchPosts(language));
+  }, [language]);
 
   return (
     <div>
@@ -45,7 +63,7 @@ function NavbarComponent() {
                   }
                   to="/posts"
                 >
-                  Posts
+                  {t("POSTS")}
                 </NavLink>
               )}
             </NavItem>
@@ -58,13 +76,22 @@ function NavbarComponent() {
                 navigate("/login");
               }}
             >
-              Logout
+              {t("LOGOUT")}
             </Button>
           ) : (
             <Button color="primary" onClick={() => navigate("/login")}>
-              Login
+              {t("LOGIN")}
             </Button>
           )}
+          <select
+            name="language"
+            id="language"
+            value={language}
+            onChange={changeLanguage}
+          >
+            <option value="en">English</option>
+            <option value="hi">Hindi</option>
+          </select>
         </Collapse>
       </Navbar>
     </div>

@@ -67,14 +67,25 @@ export const {
 } = postsSlice.actions;
 export default postsSlice.reducer;
 
-export function fetchPosts() {
+export function fetchPosts(language) {
   return async function fetchPostsThunk(dispatch, getState) {
     dispatch(setStatus(STATUSES.LOADING));
 
     try {
-      const res = await fetch("https://jsonplaceholder.typicode.com/posts");
+      let url;
+      if (language === "en") {
+        url = "https://jsonplaceholder.typicode.com/posts";
+      } else {
+        url = "https://dummyjson.com/posts";
+      }
+      const res = await fetch(url);
       const data = await res.json();
-      dispatch(setPosts(data));
+      if (language === "hi") {
+        console.log(data.posts);
+        dispatch(setPosts(data.posts));
+      } else {
+        dispatch(setPosts(data));
+      }
       dispatch(setStatus(STATUSES.IDLE));
     } catch (error) {
       console.log(error);
